@@ -146,11 +146,11 @@ $lots = [
     <nav class="nav">
         <ul class="nav__list container">
 
-            <?php $i = 0; while($i < count($category)): ?>
+            <?php foreach ($category as $cat): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $category[$i];?></a>
+                    <a href="pages/all-lots.html"><?php echo $cat;?></a>
                 </li>
-            <?php $i++; endwhile;?>
+            <?php endforeach; ?>
 
         </ul>
     </nav>
