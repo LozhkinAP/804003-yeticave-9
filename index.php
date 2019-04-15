@@ -46,6 +46,18 @@ $lots = [
 ];
 
 
+function initPrice($initPrice)
+{
+    $initPrice = ceil($initPrice);
+
+    if ($initPrice >= 1000) {
+        $initPrice = number_format($initPrice, 0, '', ' ');
+        $initPrice .= ' ₽';
+    }
+
+    return $initPrice;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -125,8 +137,8 @@ $lots = [
                     <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?php echo $lot['name'];?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?php echo $lot['price'];?><b class="rub">р</b></span>
+                            <span class="lot__amount">Стартовая цена </span>
+                            <span class="lot__cost"><?php echo initPrice($lot['price']); ?>
                         </div>
                         <div class="lot__timer timer">
                             12:23
