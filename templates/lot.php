@@ -10,8 +10,8 @@
                 <span class="lot__amount">Стартовая цена </span>
                 <span class="lot__cost"><?php echo esc(initPrice($lot['price'])); ?>
             </div>
-            <div class="lot__timer timer">
-                12:23
+            <div class="lot__timer timer <?php echo endSaleTimerHour()?>">
+                <?php echo endSaleTimer()?>
             </div>
         </div>
     </div>
