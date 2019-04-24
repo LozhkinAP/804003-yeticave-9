@@ -114,21 +114,21 @@ SELECT name FROM categories;
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, 
 ссылку на изображение, цену, название категории;*/
 
-SELECT l.NAME, l.init_price, l.img_path, c.NAME category_name, r.rate_price 
+SELECT l.name, l.init_price, l.img_path, c.name category_name, r.rate_price 
 	FROM lot as l 
 	INNER JOIN categories as c ON l.category_id = c.id 
 	INNER JOIN rate AS r ON r.lot_id = l.id 
 	ORDER BY l.id DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот;*/
-SELECT l.NAME lot_name, c.NAME category_name
+SELECT l.name lot_name, c.name category_name
     FROM lot as l INNER JOIN categories as c 
-    ON l.category_id = c.id AND l.id=1;
+    ON l.category_id = c.id AND l.id = 1;
 
 /*обновить название лота по его идентификатору;*/
 UPDATE lot
     SET name = 'Samsung Galaxy'
-    WHERE id=2;
+    WHERE id = 2;
 
 /*получить список самых свежих ставок для лота по его идентификатору.*/
-SELECT * FROM rate WHERE lot_id=5 ORDER BY id DESC;
+SELECT * FROM rate WHERE lot_id = 5 ORDER BY id DESC;
