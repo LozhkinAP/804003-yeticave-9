@@ -30,66 +30,66 @@ VALUES
 	'2014 Rossignol District Snowboard', 
 	'Описание лота 1', 
 	'img/lot-1.jpg', 
-	'10999', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Доски и лыжи'), 
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru')
+	10999, 
+	100, 
+	1, 
+	1,
+	1
 ),
 (
 	NOW(), 
 	'DC Ply Mens 2016/2017 Snowboard', 
 	'Описание лота 2', 
 	'img/lot-2.jpg', 
-	'159999', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Доски и лыжи'), 
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru')
+	159999, 
+	100, 
+	2, 
+	2,
+	2
 ),
 (
 	NOW(), 
 	'Крепления Union Contact Pro 2015 года размер L/XL', 
 	'Описание лота 3', 
 	'img/lot-3.jpg', 
-	'8000', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Крепления'), 
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru')
+	8000, 
+	100, 
+	4, 
+	1,
+	1
 ),
 (
 	NOW(), 
 	'Ботинки для сноуборда DC Mutiny Charocal', 
 	'Описание лота 4', 
 	'img/lot-4.jpg', 
-	'10999', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Ботинки'), 
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru')
+	10999, 
+	100, 
+	3, 
+	1,
+	2
 ),
 (
 	NOW(), 
 	'Куртка для сноуборда DC Mutiny Charocal', 
 	'Описание лота 5', 
 	'img/lot-5.jpg', 
-	'7500', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Одежда'), 
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru')
+	7500, 
+	100, 
+	5, 
+	1,
+	1
 ),
 (
 	NOW(), 
 	'Маска Oakley Canopy', 
 	'Описание лота 6', 
 	'img/lot-6.jpg', 
-	'5400', 
-	'100', 
-	(SELECT id FROM categories WHERE name = 'Разное'), 
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru'),
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru')
+	5400, 
+	100, 
+	6, 
+	2,
+	1
 );
 
 /*Добавление ставок*/
@@ -97,15 +97,15 @@ INSERT INTO rate (dt_rate, rate_price, user_id, lot_id)
 VALUES 
 (
 	NOW(), 
-	'20000',
-	(SELECT id FROM user WHERE email = 'ap_job@mail.ru'), 
-	(SELECT id FROM lot WHERE name = 'Куртка для сноуборда DC Mutiny Charocal')
+	20000,
+	1, 
+	1
 ),
 (
 	NOW(), 
-	'30000',
-	(SELECT id FROM user WHERE email = 'apl_job@mail.ru'), 
-	(SELECT id FROM lot WHERE name = 'Ботинки для сноуборда DC Mutiny Charocal')
+	30000,
+	2, 
+	2
 );
 
 /*получить все категории*/
@@ -114,20 +114,21 @@ SELECT name FROM categories;
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, 
 ссылку на изображение, цену, название категории;*/
 
-SELECT l.NAME, l.init_price, l.img_path, c.NAME category_name
-	FROM lot as l INNER JOIN categories as c 
-	ON l.category_id = c.id ORDER BY l.id DESC
-
+SELECT l.NAME, l.init_price, l.img_path, c.NAME category_name, r.rate_price 
+	FROM lot as l 
+	INNER JOIN categories as c ON l.category_id = c.id 
+	INNER JOIN rate AS r ON r.lot_id = l.id 
+	ORDER BY l.id DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот;*/
 SELECT l.NAME lot_name, c.NAME category_name
-	FROM lot as l INNER JOIN categories as c 
-	ON l.category_id = c.id AND l.id='1';
+    FROM lot as l INNER JOIN categories as c 
+    ON l.category_id = c.id AND l.id=1;
 
 /*обновить название лота по его идентификатору;*/
 UPDATE lot
-	SET name = 'Samsung Galaxy'
-	WHERE id='2';
+    SET name = 'Samsung Galaxy'
+    WHERE id=2;
 
 /*получить список самых свежих ставок для лота по его идентификатору.*/
-SELECT * FROM rate WHERE lot_id='5' ORDER BY id DESC;
+SELECT * FROM rate WHERE lot_id=5 ORDER BY id DESC;
