@@ -37,12 +37,13 @@ CREATE TABLE rate (
 CREATE TABLE user (
 	id	INT	AUTO_INCREMENT,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	email char(128) NOT NULL UNIQUE,
+	email char(128) NOT NULL,
 	pass char(64) NOT NULL,
-	name char(128) NOT NULL UNIQUE,
+	name char(128) NOT NULL,
 	avatar_path char(255),
 	contacts char(255),
 	PRIMARY KEY (id),
 	UNIQUE INDEX (email),
-	INDEX (dt_add, name)
+	INDEX (dt_add),
+	INDEX (name)
 );
