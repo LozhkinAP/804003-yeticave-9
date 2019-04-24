@@ -5,7 +5,8 @@ USE yeticavedb;
 CREATE TABLE categories (
 	id	INT	AUTO_INCREMENT,
 	name char(255),
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	INDEX (name)
 );
 
 CREATE TABLE lot (
@@ -20,7 +21,12 @@ CREATE TABLE lot (
 	usercreate_id int,
 	uservictory_id int,
 	PRIMARY KEY (id),
-	INDEX(dt_add, name, init_price, category_id, usercreate_id, uservictory_id)
+	INDEX (name),
+	INDEX (dt_add), 
+	INDEX (init_price), 
+	INDEX (category_id), 
+	INDEX (usercreate_id), 
+	INDEX (uservictory_id)
 );
 
 CREATE TABLE rate (
@@ -30,7 +36,9 @@ CREATE TABLE rate (
 	user_id int,
 	lot_id int,
 	PRIMARY KEY (id),
-	INDEX (dt_rate, user_id, lot_id)
+	INDEX (dt_rate), 
+	INDEX (user_id), 
+	INDEX (lot_id)
 );
 
 
