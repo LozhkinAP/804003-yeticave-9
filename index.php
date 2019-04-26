@@ -26,7 +26,7 @@ else{
 		]);
 	}	
 	else{
-		$error = mysqli_error();
+		$error = mysqli_error($link);
 		$content = include_template('error.php',['error' => $error]);
 	}
 }
