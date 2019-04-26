@@ -59,7 +59,7 @@
 
             <?php foreach($category as $cat):?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $cat;?></a>
+                    <a href="pages/all-lots.html"><?php echo $cat['name'];?></a>
                 </li>
             <?php endforeach; ?>
 

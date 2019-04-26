@@ -4,9 +4,12 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
-            </li>
+
+            <?php foreach ($category as $cat): ?>  
+                <li class="promo__item promo__item--<?php echo $cat['scode'];?>">
+                    <a class="promo__link" href="pages/all-lots.html"><?php echo $cat['name'];?></a>
+                </li>               
+            <?php endforeach; ?>
         </ul>
     </section>
     <section class="lots">

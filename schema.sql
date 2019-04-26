@@ -5,8 +5,10 @@ USE yeticavedb;
 CREATE TABLE categories (
 	id	INT	AUTO_INCREMENT,
 	name char(255),
+	scode char(255),
 	PRIMARY KEY (id),
-	INDEX (name)
+	INDEX (name),
+	INDEX (scode)
 );
 
 CREATE TABLE lot (

@@ -1,6 +1,30 @@
 /*Добавление категории*/
-INSERT INTO categories (name) 
-VALUES ('Доски и лыжи'), ('Крепления'), ('Ботинки'), ('Одежда'), ('Инструменты'), ('Разное');
+INSERT INTO categories (name, scode) 
+VALUES 
+(
+	'Доски и лыжи',
+	'boards'
+), 
+(
+	'Крепления',
+	'attachment'
+), 
+(
+	'Ботинки',
+	'boots'
+), 
+(
+	'Одежда',
+	'clothing'
+), 
+(
+	'Инструменты',
+	'tools'
+), 
+(
+	'Разное',
+	'other'
+);
 
 /*Добавление пользователей*/
 INSERT INTO user (dt_add, email, pass, name, avatar_path, contacts)
