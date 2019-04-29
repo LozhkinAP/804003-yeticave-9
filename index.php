@@ -6,13 +6,14 @@ require_once 'init.php';
 
 if(!$link){
 	$error = mysqli_connect_error();
-	$content = include_template('error.php',['error' => $error]);
+	$layout_content = include_template('error_connect.php', ['error' => $error]);
 }
 else{
-	$sql_lots = "SELECT l.name name, l.init_price price, l.img_path url, c.name category
-			FROM lot as l INNER JOIN categories as c ON l.category_id = c.id 
+	$sql_lots = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, c.name category
+			FROM lot as l 
+			INNER JOIN categories as c ON l.category_id = c.id 
 			ORDER BY l.id DESC";
-	$sql_category = "SELECT name, scode FROM categories";
+	$sql_category = "SELECT * FROM categories";
 
 	$result_lots = mysqli_query($link, $sql_lots);
 	$result_category = mysqli_query($link, $sql_category);
@@ -29,9 +30,8 @@ else{
 		$error = mysqli_error($link);
 		$content = include_template('error.php',['error' => $error]);
 	}
-}
 
-$layout_content = include_template('layout.php', 
+	$layout_content = include_template('layout.php', 
     [
         'content' => $content,
         'title' => 'Главная страница',
@@ -39,6 +39,7 @@ $layout_content = include_template('layout.php',
         'user_name' => $user_name,
         'category' => $category
     ]);
+}
 
 print($layout_content);
 

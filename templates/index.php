@@ -20,7 +20,7 @@
             
             <?php 
             foreach ($lots as $lot):
-            print(include_template('lot.php', ['lot' => $lot]));
+                print(include_template('lotprev.php', ['lot' => $lot]));
             endforeach; 
             ?>
             
