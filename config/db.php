@@ -1,3 +1,3 @@
 <?php 
-$db = ['host' => 'localhost','user' => 'rot','pass' => '','db' => 'yeticavedb'];
+$db = ['host' => 'localhost','user' => 'root','pass' => '','db' => 'yeticavedb'];
 ?>
