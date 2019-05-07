@@ -20,6 +20,7 @@ CREATE TABLE lot (
 	init_price int NOT NULL,
 	step_rate int NOT NULL,
 	category_id int,
+	end_lot_time datetime,
 	usercreate_id int,
 	uservictory_id int,
 	PRIMARY KEY (id),
@@ -27,6 +28,7 @@ CREATE TABLE lot (
 	INDEX (dt_add), 
 	INDEX (init_price), 
 	INDEX (category_id), 
+	INDEX (end_lot_time),
 	INDEX (usercreate_id), 
 	INDEX (uservictory_id)
 );

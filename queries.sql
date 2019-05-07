@@ -47,7 +47,7 @@ VALUES
 );
 
 /*Добавление лотов*/
-INSERT INTO lot (dt_add, name, description, img_path, init_price, step_rate, category_id, usercreate_id, uservictory_id)
+INSERT INTO lot (dt_add, name, description, img_path, init_price, step_rate, category_id, end_lot_time, usercreate_id, uservictory_id)
 VALUES 
 (
 	NOW(), 
@@ -56,7 +56,8 @@ VALUES
 	'img/lot-1.jpg', 
 	10999, 
 	100, 
-	1, 
+	1,
+	NOW(),
 	1,
 	1
 ),
@@ -68,6 +69,7 @@ VALUES
 	159999, 
 	100, 
 	2, 
+	NOW(),
 	2,
 	2
 ),
@@ -79,6 +81,7 @@ VALUES
 	8000, 
 	100, 
 	4, 
+	NOW(),
 	1,
 	1
 ),
@@ -90,6 +93,7 @@ VALUES
 	10999, 
 	100, 
 	3, 
+	NOW(),
 	1,
 	2
 ),
@@ -101,6 +105,7 @@ VALUES
 	7500, 
 	100, 
 	5, 
+	NOW(),
 	1,
 	1
 ),
@@ -112,6 +117,7 @@ VALUES
 	5400, 
 	100, 
 	6, 
+	NOW(),
 	2,
 	1
 );
@@ -154,7 +160,43 @@ VALUES
 	30000,
 	2, 
 	6
-)
+),
+(
+	NOW(), 
+	20000,
+	1, 
+	7
+),
+(
+	NOW(), 
+	30000,
+	2, 
+	8
+),
+(
+	NOW(), 
+	20000,
+	1, 
+	9
+),
+(
+	NOW(), 
+	30000,
+	2, 
+	10
+),
+(
+	NOW(), 
+	20000,
+	1, 
+	11
+),
+(
+	NOW(), 
+	30000,
+	2, 
+	12
+);
 
 /*получить все категории*/
 SELECT name FROM categories;
