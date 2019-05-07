@@ -5,6 +5,7 @@
     <title><?php echo $title?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-wrapper">
@@ -19,7 +20,7 @@
             <input type="search" name="search" placeholder="Поиск лота">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
-        <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
+        <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
 
         <nav class="user-menu">
         
@@ -48,8 +49,8 @@
     </div>
 </header>
 
-<main class="container">
-    <?php echo $content;?>
+<main class="<?php CheckUrl();?>">
+    <?php if(isset($content)): echo $content; endif; ?>
 </main>
 </div>
 
@@ -57,11 +58,13 @@
     <nav class="nav">
         <ul class="nav__list container">
 
-            <?php foreach($category as $cat):?>
-                <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $cat['name'];?></a>
-                </li>
-            <?php endforeach; ?>
+            <?php if(isset($category)): ?>
+                <?php foreach($category as $cat): ?>
+                        <li class="nav__item">
+                            <a href="pages/all-lots.html"><?php echo $cat['name'];?></a>
+                        </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
         </ul>
     </nav>

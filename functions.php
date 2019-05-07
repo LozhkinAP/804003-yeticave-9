@@ -56,4 +56,12 @@ function endSaleTimerHour(){
     return $Class;
 }
 
+function CheckUrl(){
+    $page_url = $_SERVER['REQUEST_URI'];
+    $main_class;
+    if($page_url == "/" || $page_url == "/index.php" ) {
+        $main_class = "container";
+    }
+    echo $main_class;
+}
 ?>
