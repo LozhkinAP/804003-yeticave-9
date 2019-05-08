@@ -32,6 +32,7 @@ $content = include_template('lot_add.php',
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$lot_new = $_POST;
+	$path = $_FILES['img']['tmp_name'];
 
 	$required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 	$errors = [];
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errors[$field] = 'Поле не заполнено';
 		}
 	}
-	if (isset($_FILES['img']['tmp_name'])) {
-		$path = $_FILES['img']['tmp_name'];
+	
+	if (isset($path) and !empty($path)) {
 		$img_name = uniqid() . '.jpg';
 		$img_path = __DIR__ . '/uploads/';
 		$img_url = '/uploads/' . $img_name;
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errors['file'] = 'Загрузите картинку в PNG или JPEG';
 		}
 		else {
-			move_uploaded_file($_FILES['img']['tmp_name'], $img_path . $img_name);		
+			move_uploaded_file($path, $img_path . $img_name);		
 		}
 	}
 	else {
