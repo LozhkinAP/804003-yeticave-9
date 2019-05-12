@@ -4,6 +4,11 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'init.php';
 
+if (!isset($_SESSION['username'])) {
+	header("HTTP/1.1 403 Forbidden" ); 
+	exit();
+}
+
 if(!$link) {
 	$error = mysqli_connect_error($link);
 	$content = include_template('error.php',
