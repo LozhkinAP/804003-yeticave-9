@@ -59,3 +59,8 @@ CREATE TABLE user (
 	INDEX (dt_add),
 	INDEX (name)
 );
+
+
+CREATE FULLTEXT INDEX lot_ft_search
+ON lot(name, description);
+
