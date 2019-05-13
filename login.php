@@ -67,11 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$userData = mysqli_fetch_assoc($result_userData);
 		$userName = $userData['name'];
 		$password = $userData['pass'];
+		$userId = $userData['id'];
 	}
 
 	if (password_verify($loginInfo['password'], $password)) {
 		session_start();
 		$_SESSION['username'] = $userName;
+		$_SESSION['userid'] = $userId;
 		header("Location: index.php");
 	} else {   
 		$errors['password'] = 'Пароль введено не верно';
@@ -92,8 +94,6 @@ $layout_content = include_template('layout.php',
 	[
 		'content' => $content,
 		'title' => 'Вход на сайт',
-		'is_auth' => $is_auth,
-		'user_name' => $user_name,
 		'category' => $category
 	]);
 

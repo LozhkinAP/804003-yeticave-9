@@ -26,8 +26,8 @@
           <?php if(isset($_SESSION['username'])) :?>
 
           <div class="lot-item__state">
-            <div class="lot-item__timer timer <?php echo endSaleTimerHour()?>">
-              <?php echo endSaleTimer($content_lot['dt']);?>
+            <div class="lot-item__timer timer <?php echo endSaleTimerHour($content_lot['end_time'])?>">
+              <?php echo endSaleTimer($content_lot['end_time']);?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -35,16 +35,16 @@
                 <span class="lot-item__cost"><?php echo $content_lot['rate_price'];?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?php echo $content_lot['step_rate'];?></span>
+                Мин. ставка <span><?php echo $content_lot['step_rate'] + $content_lot['rate_price']; ?></span>
               </div>
             </div>
             
             
-              <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-                <p class="lot-item__form-item form__item form__item--invalid">
+              <form class="lot-item__form <?php if(isset($errors['cost'])) : echo 'form--invalid'; endif; ?>" action="lot.php?id=<?php echo $content_lot['id'];?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])) : echo 'form__item--invalid'; endif; ?>">
                   <label for="cost">Ваша ставка</label>
-                  <input id="cost" type="text" name="cost" placeholder="12 000">
-                  <span class="form__error">Введите наименование лота</span>
+                  <input id="cost" type="text" name="cost" placeholder="<?php echo $content_lot['step_rate'] + $content_lot['rate_price']; ?>" value="<?php echo $add_rate['cost']; ?>">
+                  <span class="form__error"><?php echo $errors['cost']; ?></span>
                 </p>
                 <button type="submit" class="button">Сделать ставку</button>
               </form>
@@ -52,64 +52,19 @@
             
           </div>
 
-          <?php endif; ?>
-          <!--
           <div class="history">
-            <h3>История ставок (<span>10</span>)</h3>
+            <h3>История ставок (<span><?php echo count($rates);?></span>)</h3>
             <table class="history__list">
-              <tr class="history__item">
-                <td class="history__name">Иван</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">5 минут назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Константин</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">20 минут назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Евгений</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">Час назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Игорь</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 08:21</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Енакентий</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 13:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Семён</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 12:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Илья</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 10:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Енакентий</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 13:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Семён</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 12:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Илья</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 10:20</td>
-              </tr>
+              <?php foreach($rates as $r): ?>
+                <tr class="history__item">
+                  <td class="history__name"><?php echo $r['name'];?></td>
+                  <td class="history__price"><?php echo $r['rate_price'];?></td>
+                  <td class="history__time"><?php echo TimeRate($r['dt_rate']);?></td>
+                </tr>
+              <?php endforeach; ?>
             </table>
           </div>
-          -->
+          <?php endif; ?>
 
         </div>
       </div>

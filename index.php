@@ -20,7 +20,7 @@ if(!$link) {
 	exit;
 }
 
-$sql_lots = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, c.name category
+$sql_lots = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, c.name category, l.end_lot_time end_time
 			FROM lot as l 
 			INNER JOIN categories as c ON l.category_id = c.id 
 			ORDER BY l.id DESC";
@@ -54,8 +54,6 @@ $layout_content = include_template('layout.php',
 	[
 		'content' => $content,
 		'title' => 'Главная страница',
-		'is_auth' => $is_auth,
-		'user_name' => $user_name,
 		'category' => $category
 	]);
 print($layout_content);

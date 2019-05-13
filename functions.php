@@ -16,39 +16,58 @@ function esc($str){
 	return $data;
 }
 
-function endSaleTimer(){
-    $LastDay = strtotime('now 00:00:00')+60*60*24;
+function TimeRate($data){
+    $timeStRate = $data;
+    $RateDate = strtotime($timeStRate);
+    $InitDay = strtotime('now 00:00:00');
     $CurrentData = strtotime('now');
-    $Delta = $LastDay - $CurrentData;
+    $Delta = $CurrentData - $RateDate;
+
+    if (($CurrentData - $InitDay + 24*3600) < $Delta) {
+        $Time = strstr($timeStRate, ' ', true).'в '.strstr($timeStRate, ' ', false);
+    } else if (($CurrentData - $InitDay) < $Delta) {
+        $Time = 'Вчера, в '.strstr($timeStRate, ' ', false);
+    } else if (floor($Delta/3600) == 0) {
+        $Time = floor($Delta/60);
+        $Time = $Time.' '.get_noun_plural_form($Time, 'минута', 'минуты', 'минут').' назад';
+    } else if(floor($Delta/3600) > 0) {
+        $Time = floor($Delta/3600);
+        $Time = $Time.' '.get_noun_plural_form($Time, 'час', 'часа', 'часов').' назад';        
+    }
+
+    return $Time;
+}
+
+function endSaleTimer($TimeEndOfLot) {
+
+    $CurrentData = strtotime('now');
+    $EndOfLot = strtotime($TimeEndOfLot);
+    $Delta = $EndOfLot - $CurrentData;
 
 	$Hours = floor($Delta/3600);
     $Minutes = floor(($Delta - $Hours*3600)/60);
-    if($Hours<10){
-    	if($Minutes<10){
-    		$timer = '0'.$Hours.':'.'0'.$Minutes;
-    	}
-    	else{
-    		$timer = '0'.$Hours.':'.$Minutes;
-    	}
-    }
-    else{
-    	if($Minutes<10){
-    		$timer = $Hours.':'.'0'.$Minutes;
-    	}
-    	else{
-    		$timer = $Hours.':'.$Minutes;
-    	}
-    }
+    $Seconds = $Delta - $Hours*3600 - $Minutes*60;
 
+    if($Seconds<10) {
+        $Seconds = '0'.$Seconds;
+    }
+    if($Hours<10) {
+        $Hours = '0'.$Hours;
+    }
+    if($Minutes<10) {
+        $Minutes = '0'.$Minutes;
+    }
+    $timer = $Hours.':'.$Minutes.':'.$Seconds;
     return $timer;
 }
 
-function endSaleTimerHour(){
-    $LastDay = strtotime('now 00:00:00')+60*60*24;
-    $CurrentData = strtotime('now');
-    $Delta = $LastDay - $CurrentData;
+function endSaleTimerHour($TimeEndOfLot){
 
-	$Hours = floor($Delta/3600);
+    $CurrentData = strtotime('now');
+    $EndOfLot = strtotime($TimeEndOfLot);
+    $Delta = $EndOfLot - $CurrentData;
+
+    $Hours = floor($Delta/3600);
 	$Class = '';
 	if($Hours<1){
 		$Class = 'timer--finishing';

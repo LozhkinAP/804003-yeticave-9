@@ -41,6 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 	$errors = [];
+
+	if (!(is_numeric($_POST['lot-rate']) && $_POST['lot-rate'] > 0)){
+		$errors['lot-rate'] = 'Введите число. (число должно быть > 0)';
+	}
+
+	if (!(is_numeric($_POST['lot-step']) && $_POST['lot-step'] > 0)){
+		$errors['lot-step'] = 'Введите число. (число должно быть > 0)';
+	}
+
+	if (!is_date_valid($_POST['lot-date'])){
+		$errors['lot-date'] = 'Введите дату в формате ГГГГ-ММ-ДД';
+	}
+
 	foreach ($required_fields as $field) {
 		if (empty($_POST[$field])) {
 			$errors[$field] = 'Поле не заполнено';
@@ -63,18 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$errors['file']  = 'Вы не загрузили файл';
 	}
 
-	if (!(is_numeric($_POST['lot-rate']) && $_POST['lot-rate'] > 0)){
-		$errors['lot-rate'] = 'Введите число. (число должно быть > 0)';
-	}
-
-	if (!(is_numeric($_POST['lot-step']) && $_POST['lot-step'] > 0)){
-		$errors['lot-step'] = 'Введите число. (число должно быть > 0)';
-	}
-
-	if (!is_date_valid($_POST['lot-date'])){
-		$errors['lot-date'] = 'Введите дату в формате ГГГГ-ММ-ДД';
-	}
-
 	if(count($errors)) {
 		$content = include_template('lot_add.php', 
 			[
@@ -91,9 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$result_category_id = mysqli_stmt_get_result($stmt_id);
 		$category_id = mysqli_fetch_assoc($result_category_id); 
 
-		$sql_add = "INSERT INTO lot (dt_add, name, description, img_path, init_price, step_rate, category_id, end_lot_time, usercreate_id, uservictory_id)
-		VALUES (NOW(), ?, ?, ?, ?, ?, ?, ? , 1, 1)";
-
+		/*Вставляем лот в таблицу lot*/
+		$userID = $_SESSION['userid'];
+		$sql_add = "INSERT INTO lot (dt_add, name, description, img_path, init_price, step_rate, category_id, end_lot_time, usercreate_id)
+		VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = db_get_prepare_stmt($link, $sql_add, 
 			[
 				$lot_new['lot-name'],
@@ -102,24 +104,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$lot_new['lot-rate'],
 				$lot_new['lot-step'],
 				$category_id['id'],
-				$lot_new['lot-date']
+				$lot_new['lot-date'],
+				$userID
 			]);
-
 		$result_add = mysqli_stmt_execute($stmt);
+		$lot_id = mysqli_insert_id($link);
 
-		if ($result_add) {
-			$lot_id = mysqli_insert_id($link);
-			header("Location: lot.php?id=" . $lot_id);
-		}
-
-		else {
+		if (!$result_add) {
 			$error = mysqli_error($link);
 			$content = include_template('error.php',
 				[
 					'text'	=> 'Ошибка выборки из БД',
 					'error' => $error
 				]);
-		}	
+			$layout_content = include_template('layout.php', 
+			[
+				'content' => $content,
+			]);
+			print($layout_content);
+			exit;
+		}
+
+		/*Добавляем в таблицу rate ставку на новый лот, равную начальный цене (вдальнейшем при создании ставка на лот цена будет начальная цена + ставка)*/	
+
+		$sql_addRate = "INSERT INTO rate (dt_rate, rate_price, user_id, lot_id)
+		VALUES (NOW(), ?, ?, ?)";
+
+		$stmt = db_get_prepare_stmt($link, $sql_addRate, 
+			[
+				$lot_new['lot-rate'],
+				$userID,
+				$lot_id
+			]);
+
+		$result_add_rate = mysqli_stmt_execute($stmt);		
+		
+		if ($result_add) {
+			header("Location: lot.php?id=" . $lot_id);
+		}
+
 	}
 }
 
@@ -127,11 +150,8 @@ $layout_content = include_template('layout.php',
 	[
 		'content' => $content,
 		'title' => 'Добавление лота',
-		'is_auth' => $is_auth,
-		'user_name' => $user_name,
 		'category' => $category
 	]);
-
 
 print($layout_content);
 ?>
