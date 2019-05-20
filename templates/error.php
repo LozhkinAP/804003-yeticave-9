@@ -2,9 +2,8 @@
 <div class="container">
 
 <?php
-
-echo $text.' : '.$error;
-
+if(!empty($error)) {$error = ' Ошибка: '.$error;}
+echo $text.$error;
 ?>
 
 </div>

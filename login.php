@@ -1,28 +1,13 @@
 <?php
-/*require_once 'data.php';*/
+require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
-require_once 'init.php';
 
 if(!$link) {
-	$error = mysqli_connect_error($link);
-	$content = include_template('error.php',
-		[
-			'text'	=> 'Ошибка соединения с БД',
-			'error' => $error
-		]);
-
-	$layout_content = include_template('layout.php', 
-		[	
-			'content' => $content
-		]);
-	print($layout_content);
-	exit;
+	connectDbError($link, 'Ошибка соединения с БД');
 }
 
-$sql_category = "SELECT * FROM categories";
-$result_category = mysqli_query($link, $sql_category);
-$category = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
+$category = getAllCategory($link);
 
 $content = include_template('login.php', [
 	'category' => $category
@@ -49,29 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	} 
 
-	$check_email = "SELECT email FROM user WHERE email = ?";
-	$result_check_email = mysqli_prepare($link, $check_email);
-	$stmt_check = db_get_prepare_stmt($link, $check_email, [$loginInfo['email']]);
-	mysqli_stmt_execute($stmt_check);
-	$result_check_email = mysqli_stmt_get_result($stmt_check);
-	$email_result = mysqli_fetch_assoc($result_check_email);
+	$userInfo = getInfoUserByEmail($link, $loginInfo['email']);
 
-	if(!$email_result){
+	if(!$userInfo) {
 		$errors['email'] = 'Данный email не зарегистрирован';
 	} else {
-		$userData = "SELECT * FROM user WHERE email = ?";
-		$result_userData = mysqli_prepare($link, $userData);
-		$stmt_check = db_get_prepare_stmt($link, $userData, [$loginInfo['email']]);
-		mysqli_stmt_execute($stmt_check);
-		$result_userData = mysqli_stmt_get_result($stmt_check);
-		$userData = mysqli_fetch_assoc($result_userData);
-		$userName = $userData['name'];
-		$password = $userData['pass'];
-		$userId = $userData['id'];
+		$userName = $userInfo['name'];
+		$password = $userInfo['pass'];
+		$userId = $userInfo['id'];
 	}
 
 	if (password_verify($loginInfo['password'], $password)) {
-		session_start();
 		$_SESSION['username'] = $userName;
 		$_SESSION['userid'] = $userId;
 		header("Location: index.php");
@@ -81,21 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 	if (count($errors)) {
-		$content = include_template('login.php', 
-			[
-				'category' => $category,
-				'loginInfo'=> $loginInfo,
-				'errors' => $errors
-			]);
+		$content = include_template('login.php', ['category' => $category, 'loginInfo'=> $loginInfo, 'errors' => $errors]);
 	}
 }
 
-$layout_content = include_template('layout.php', 
-	[
-		'content' => $content,
-		'title' => 'Вход на сайт',
-		'category' => $category
-	]);
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Вход на сайт', 'category' => $category]);
 
 print($layout_content);
 

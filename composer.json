@@ -1,0 +1,13 @@
+{
+    "name": "andy/804003-yeticave-9",
+    "description": "Teach. PHP htmlacademy",
+    "authors": [
+        {
+            "name": "A.P.Lozhkin",
+            "email": "a.p.lozhkin@mail.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

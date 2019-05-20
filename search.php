@@ -1,70 +1,39 @@
 <?php
-/*require_once 'data.php';*/
+require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
-require_once 'init.php';
 
 if(!$link) {
-	$error = mysqli_connect_error($link);
-	$content = include_template('error.php',
-		[
-			'text'	=> 'Ошибка соединения с БД',
-			'error' => $error
-		]);
-
-	$layout_content = include_template('layout.php', 
-		[	
-			'content' => $content
-		]);
-	print($layout_content);
-	exit;
+	connectDbError($link, 'Ошибка соединения с БД');
 }
-
-$sql_category = "SELECT * FROM categories";
-$result_category = mysqli_query($link, $sql_category);
-$category = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
-
+$category = getAllCategory($link);
 $search = trim($_GET['search']) ?? '';
+$cur_page = $_GET['page'] ?? 1;
+$page_items = 3;
+$sql = "SELECT COUNT(*) as cnt FROM lot WHERE MATCH (name, description) AGAINST(?)";
+$stmt = db_get_prepare_stmt($link, $sql, [$_GET['search']]);
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+$result = mysqli_fetch_assoc($res);
+$items_count = $result['cnt'];
+$pages_count = ceil($items_count / $page_items);
+$offset = ($cur_page - 1) * $page_items;
+$pages = range(1, $pages_count);
 if ($search) {
-	$sql_lots = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, l.description description, c.name category, l.end_lot_time end_time
-	FROM lot as l 
-	INNER JOIN categories as c ON l.category_id = c.id 
-	WHERE MATCH (l.name, l.description) AGAINST(?)
-	ORDER BY l.id DESC";
-
-	$result_prepare = mysqli_prepare($link, $sql_lots);
-	$stmt = db_get_prepare_stmt($link, $sql_lots, [$search]);
-	mysqli_stmt_execute($stmt);
-	$result = mysqli_stmt_get_result($stmt);
-	$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+	$lots = getSearch($link, $search, $page_items, $offset);
 	if (empty($lots)) {
-		$content = include_template('error.php',
-			[
-				'text'	=> 'Ничего не найдено по вашему запросу',
-			]);
-
-		$layout_content = include_template('layout.php', 
-			[	
-				'content' => $content
-			]);
-		print($layout_content);
-		exit;
+		error404('Не найден лот по вашему запросу');
 	}
 } 
-
-$content = include_template('search.php', [
+$content = include_template('search.php',  [
+	'lots' => $lots, 
 	'category' => $category,
-	'lots' => $lots
+	'search' =>  $search,
+	'pages_count' => $pages_count,
+	'pages' => $pages,
+	'cur_page' => $cur_page
+
 ]);
-
-$layout_content = include_template('layout.php', 
-	[
-		'content' => $content,
-		'title' => 'Мои ставки',
-		'category' => $category
-	]);
-
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Мои ставки', 'category' => $category]);
 print($layout_content);
-
 ?>

@@ -7,7 +7,7 @@
         <?php if(isset($category)): ?>
             <?php foreach ($category as $cat): ?>  
                 <li class="promo__item promo__item--<?php echo $cat['scode'];?>">
-                    <a class="promo__link" href="pages/all-lots.html"><?php echo $cat['name'];?></a>
+                    <a class="promo__link" href="alllots.php?category=<?php echo $cat['id']; ?>"><?php echo $cat['name'];?></a>
                 </li>               
             <?php endforeach; ?>
         <?php endif; ?> 

@@ -1,11 +1,7 @@
     <nav class="nav">
       <ul class="nav__list container">
 
-        <?php foreach ($category as $cat): ?> 
-          <li class="nav__item">
-            <a href="all-lots.html"><?php echo $cat['name'];?></a>
-          </li>
-        <?php endforeach; ?>
+        <?php require_once 'list-categories.php'; ?> 
 
       </ul>
     </nav>
@@ -24,7 +20,7 @@
                 <?php echo $b['category']; ?>
               </td>
               <td class="rates__timer">
-                <div class="timer <?php echo endSaleTimerHour($b['end_time']); ?>"><?php echo endSaleTimer($b['end_time']); ?></div>
+                <div class="timer <?php echo endSaleTimerHour($b['end_time']); ?>"><?php echo endLot($b['end_time']); ?></div>
               </td>
               <td class="rates__price">
                 <?php echo $b['rate_price']; ?>

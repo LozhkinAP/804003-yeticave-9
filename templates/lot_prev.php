@@ -14,7 +14,7 @@
                 <span class="lot__cost"><?php echo esc(initPrice($lot['price'])); ?>
             </div>
             <div class="lot__timer timer <?php echo endSaleTimerHour($lot['end_time'])?>">
-                <?php echo endSaleTimer($lot['end_time']);?>
+                <?php echo endLot($lot['end_time']); ?>
             </div>
         </div>
     </div>

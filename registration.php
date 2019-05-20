@@ -1,28 +1,13 @@
 <?php
-/*require_once 'data.php';*/
+require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
-require_once 'init.php';
 
-if (!$link) {
-	$error = mysqli_connect_error($link);
-	$content = include_template('error.php',
-		[
-			'text'	=> 'Ошибка соединения с БД',
-			'error' => $error
-		]);
-
-	$layout_content = include_template('layout.php', 
-		[	
-			'content' => $content
-		]);
-	print($layout_content);
-	exit;
+if(!$link) {
+	connectDbError($link, 'Ошибка соединения с БД');
 }
 
-$sql_category = "SELECT * FROM categories";
-$result_category = mysqli_query($link, $sql_category);
-$category = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
+$category = getAllCategory($link);
 
 $content = include_template('reg.php', [
 	'category' => $category
@@ -62,67 +47,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	$check_email = "SELECT email FROM user WHERE email = ?";
-	$result_check_email = mysqli_prepare($link, $check_email);
-	$stmt_check = db_get_prepare_stmt($link, $check_email, [$reginfo['email']]);
-	mysqli_stmt_execute($stmt_check);
-	$result_check_email = mysqli_stmt_get_result($stmt_check);
-	$email_result = mysqli_fetch_assoc($result_check_email); 	
+	$userInfo = getInfoUserByEmail($link, $reginfo['email']);
+	$email_result = $userInfo['email'];
+
 	if($email_result){
 		$errors['email'] = 'Данный email уже зарегистрирован';
 	}
 
 	if (count($errors)) {
-		$content = include_template('reg.php', 
-			[
-				'category' => $category,
-				'reginfo'=> $reginfo,
-				'errors' => $errors
-			]);
-	}
-	else { 
+		$content = include_template('reg.php', ['category' => $category, 'reginfo'=> $reginfo, 'errors' => $errors]);
+	} else { 
 		$passwordHash = password_hash($reginfo['password'], PASSWORD_DEFAULT);
 		$reginfo['password'] = $passwordHash;
 
 		$sql_add = "INSERT INTO user (dt_add, email, pass, name, avatar_path, contacts)
 		VALUES (NOW(), ?, ?, ?, ?, ?)";
 
-		$stmt = db_get_prepare_stmt($link, $sql_add, 
-			[
-				$reginfo['email'],
-				$reginfo['password'],
-				$reginfo['name'],
-				$img_url,
-				$reginfo['message']
-			]);
-
+		$stmt = db_get_prepare_stmt($link, $sql_add, [$reginfo['email'], $reginfo['password'], $reginfo['name'], $img_url, $reginfo['message']]);
 		$result_add = mysqli_stmt_execute($stmt);
 
 		if ($result_add) {
 			header("Location: login.php");
-		}
-
-		else {
+		} else {
 			$error = mysqli_error($link);
-			$content = include_template('error.php',
-				[
-					'text'	=> 'Ошибка выборки из БД',
-					'error' => $error
-				]);
+			$content = include_template('error.php', ['text'=> 'Ошибка при проверке', 'error' => $error]);
 		}	
 	}	
 
-
 }
 
-$layout_content = include_template('layout.php', 
-	[
-		'content' => $content,
-		'title' => 'Регистрация нового аккаунта',
-		'is_auth' => $is_auth,
-		'user_name' => $user_name,
-		'category' => $category
-	]);
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Регистрация нового аккаунта', 'is_auth' => $is_auth, 'user_name' => $user_name, 'category' => $category]);
 
 print($layout_content);
 
