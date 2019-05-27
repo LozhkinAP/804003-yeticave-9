@@ -12,19 +12,19 @@
 
     <div class="form__item <?php if(isset($errors['email'])) : echo 'form__item--invalid'; endif; ?>"> <!-- form__item--invalid -->
       <label for="email">E-mail <sup>*</sup></label>
-      <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?php echo $reginfo['email']; ?>">
+      <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?php if(isset($reginfo['email'])) : echo htmlspecialchars($reginfo['email']); endif;?>">
       <span class="form__error"><?php if(isset($errors['email'])) : echo $errors['email']; endif; ?></span>
     </div>
 
     <div class="form__item <?php if(isset($errors['password'])) : echo 'form__item--invalid'; endif; ?>">
       <label for="password">Пароль <sup>*</sup></label>
-      <input id="password" type="password" name="password" placeholder="Введите пароль" value="<?php echo $reginfo['password']; ?>">
+      <input id="password" type="password" name="password" placeholder="Введите пароль" value="<?php if(isset($reginfo['password'])) : echo htmlspecialchars($reginfo['password']); endif;?>">
       <span class="form__error"><?php if(isset($errors['password'])) : echo $errors['password']; endif; ?></span>
     </div>
 
     <div class="form__item <?php if(isset($errors['name'])) : echo 'form__item--invalid'; endif; ?>">
       <label for="name">Имя <sup>*</sup></label>
-      <input id="name" type="text" name="name" placeholder="Введите имя" value="<?php echo $reginfo['name']; ?>">
+      <input id="name" type="text" name="name" placeholder="Введите имя" value="<?php if(isset($reginfo['name'])) : echo htmlspecialchars($reginfo['name']); endif;?>">
       <span class="form__error"><?php if(isset($errors['name'])) : echo $errors['name']; endif; ?></span>
     </div>
 
@@ -42,7 +42,7 @@
 
     <div class="form__item <?php if(isset($errors['message'])) : echo 'form__item--invalid'; endif; ?>">
       <label for="message">Контактные данные <sup>*</sup></label>
-      <textarea id="message" name="message" placeholder="Напишите как с вами связаться" ><?php echo $reginfo['message']; ?></textarea>
+      <textarea id="message" name="message" placeholder="Напишите как с вами связаться" ><?php if(isset($reginfo['message'])) : echo htmlspecialchars($reginfo['message']); endif;?></textarea>
       <span class="form__error"><?php if(isset($errors['message'])) : echo $errors['message']; endif; ?></span>
     </div>
 

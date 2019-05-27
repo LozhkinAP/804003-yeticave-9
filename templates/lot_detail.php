@@ -18,7 +18,7 @@
         </div>
         <div class="lot-item__right">
 
-          <?php if(isset($_SESSION['username'])) :?>
+          <?php if (isset($_SESSION['username'])) :?>
 
           <div class="lot-item__state">
             <div class="lot-item__timer timer <?php echo endSaleTimerHour($contentLot['end_time'])?>">
@@ -35,10 +35,10 @@
             </div>
             
             
-              <form class="lot-item__form <?php if(isset($errors['cost'])) : echo 'form--invalid'; endif; ?>" action="lot.php?id=<?php echo $contentLot['id'];?>" method="post" autocomplete="off" enctype="multipart/form-data">
-                <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])) : echo 'form__item--invalid'; endif; ?>">
+              <form class="lot-item__form <?php if (isset($errors['cost'])) : echo 'form--invalid'; endif; ?>" action="lot.php?id=<?php echo $contentLot['id'];?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                <p class="lot-item__form-item form__item <?php if (isset($errors['cost'])) : echo 'form__item--invalid'; endif; ?>">
                   <label for="cost">Ваша ставка</label>
-                  <input id="cost" type="text" name="cost" placeholder="<?php echo $contentLot['step_rate'] + $contentLot['rate_price']; ?>" value="<?php echo $add_rate['cost']; ?>">
+                  <input id="cost" type="text" name="cost" placeholder="<?php echo $contentLot['step_rate'] + $contentLot['rate_price']; ?>" value="<?php if (isset($add_rate['cost'])) : echo $add_rate['cost']; endif;?>">
                   <span class="form__error"><?php echo $errors['cost']; ?></span>
                 </p>
                 <button type="submit" class="button">Сделать ставку</button>

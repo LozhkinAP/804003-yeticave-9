@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
 	exit();
 }
 
-if(!$link) {
+if (!$link) {
 	connectDbError($link, 'Ошибка соединения с БД');
 }
 
@@ -16,22 +16,41 @@ $category = getAllCategory($link);
 
 $content = include_template('lot_add.php', ['category' => $category]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$lot_new = $_POST;
+	if (isset($lot_new['lot-name'])) {
+		$lot_new['lot-name'] = htmlspecialchars($lot_new['lot-name']);
+	}
+	if (isset($lot_new['message'])) {
+		$lot_new['message'] = htmlspecialchars($lot_new['message']);
+	}
+	if (isset($lot_new['lot-rate'])) {
+		$lot_new['lot-rate'] = htmlspecialchars($lot_new['lot-rate']);
+	}
+	if (isset($lot_new['lot-step'])) {
+		$lot_new['lot-step'] = htmlspecialchars($lot_new['lot-step']);
+	}	
+	if (isset($lot_new['lot-date'])) {
+		$lot_new['lot-date'] = htmlspecialchars($lot_new['lot-date']);
+	}		
+	if (isset($lot_new['category'])) {
+		$lot_new['category'] = htmlspecialchars($lot_new['category']);
+	}			
+	 
 	$path = $_FILES['img']['tmp_name'];
 	$required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 	$errors = [];
-	if (!(is_numeric($_POST['lot-rate']) && $_POST['lot-rate'] > 0)){
+	if (!(is_numeric($lot_new['lot-rate']) && $lot_new['lot-rate'] > 0)) {
 		$errors['lot-rate'] = 'Введите число. (число должно быть > 0)';
 	}
-	if (!(is_numeric($_POST['lot-step']) && $_POST['lot-step'] > 0)){
+	if (!(is_numeric($lot_new['lot-step']) && $lot_new['lot-step'] > 0)) {
 		$errors['lot-step'] = 'Введите число. (число должно быть > 0)';
 	}
-	if (!is_date_valid($_POST['lot-date'])){
+	if (!is_date_valid($lot_new['lot-date'])) {
 		$errors['lot-date'] = 'Введите дату в формате ГГГГ-ММ-ДД';
 	} else {
-		$_POST['lot-date'] = checkEndTimeLot($_POST['lot-date']);
-		if ($_POST['lot-date'] == 'error') {
+		$lot_new['lot-date'] = checkEndTimeLot($lot_new['lot-date']);
+		if ($lot_new['lot-date'] === 'error') {
 			$errors['lot-date'] = 'Введите дату не ранее чем текущий момент + 24часа';
 		}	
 	}
@@ -95,6 +114,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 $layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Добавление лота', 'category' => $category]);
-
 print($layout_content);
 ?>

@@ -3,7 +3,7 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if(!$link) {
+if (!$link) {
 	connectDbError($link, 'Ошибка соединения с БД');
 }
 $category = getAllCategory($link);
@@ -22,7 +22,7 @@ $pages = range(1, $pages_count);
 if ($search) {
 	$lots = getSearch($link, $search, $page_items, $offset);
 	if (empty($lots)) {
-		error404('Не найден лот по вашему запросу');
+		error404($link, 'Не найден лот по вашему запросу', 'Результаты поиска');
 	}
 } 
 $content = include_template('search.php',  [
@@ -34,6 +34,6 @@ $content = include_template('search.php',  [
 	'cur_page' => $cur_page
 
 ]);
-$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Мои ставки', 'category' => $category]);
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Результаты поиска', 'category' => $category]);
 print($layout_content);
 ?>

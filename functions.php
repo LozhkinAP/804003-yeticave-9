@@ -21,7 +21,7 @@ function initPrice(int $initPrice)
  * @param string $data Время завершения торгов по лоту
  * @return string $Time Время до окончания торгов по лоту в удобночитаемом формате
 */
-function TimeRate(string $data){
+function TimeRate(string $data) {
     $timeStRate = $data;
     $RateDate = strtotime($timeStRate);
     $InitDay = strtotime('now 00:00:00');
@@ -57,13 +57,13 @@ function endSaleTimer(string $TimeEndOfLot) {
     $Minutes = floor(($Delta - $Hours*3600)/60);
     $Seconds = $Delta - $Hours*3600 - $Minutes*60;
 
-    if($Seconds<10) {
+    if ($Seconds<10) {
         $Seconds = '0'.$Seconds;
     }
-    if($Hours<10) {
+    if ($Hours<10) {
         $Hours = '0'.$Hours;
     }
-    if($Minutes<10) {
+    if ($Minutes<10) {
         $Minutes = '0'.$Minutes;
     }
     $timer = $Hours.':'.$Minutes.':'.$Seconds;
@@ -74,23 +74,23 @@ function endSaleTimer(string $TimeEndOfLot) {
  * @param string $TimeEndOfLot Время завершения торгов по лоту
  * @return string Имя класса в зависимости от времени
 */
-function endSaleTimerHour(string $TimeEndOfLot){
+function endSaleTimerHour(string $TimeEndOfLot) {
     $CurrentData = strtotime('now');
     $EndOfLot = strtotime($TimeEndOfLot);
     $Delta = $EndOfLot - $CurrentData;
 
     $Hours = floor($Delta/3600);
 	$Class = '';
-	if($Hours<1){
+	if ($Hours<1) {
 		$Class = 'timer--finishing';
 	}
     return $Class;
 }
 
-function CheckUrl(){
+function CheckUrl() {
     $page_url = $_SERVER['REQUEST_URI'];
     $main_class;
-    if($page_url == "/" || $page_url == "/index.php" ) {
+    if ($page_url == "/" || $page_url == "/index.php" ) {
         $main_class = "container";
     }
     echo $main_class;
@@ -329,7 +329,7 @@ function getInfoUserById(mysqli $connect, int $Id) {
  * @param string $name Имя пользователя
  * @return array Данные о пользователе, полученные на основе информации об ID
 */
-function getCategoryByName(mesqli $connect, string $name) {
+function getCategoryByName(mysqli $connect, string $name) {
     $link = $connect;
     $nameCat = $name;
     $sqlCat = "SELECT id FROM categories WHERE name = ?";
@@ -406,13 +406,16 @@ function сonnectDbError(mysqli $connect, string $txtError) {
 
 /**
  * @param string $txtError Текст ошибки + к коду 404
+ * @param string $title - заголовок страницы
+ * @param mysqli $connect Ресурс соединения с БД
 */
-function error404(string $txtError) {
+function error404(mysqli $connect, string $txtError, string $title) {
     http_response_code(404);
     $error = http_response_code();
     $txt = $txtError;
+    $link = $connect;
     $content = include_template('error.php',['text'  => $txt, 'error' => $error]);
-    $layout_content = include_template('layout.php', ['content' => $content]);
+    $layout_content = include_template('layout.php', ['content' => $content, 'title' => $title, 'category' => $category = getAllCategory($link)]);
     print($layout_content);
     exit;
 }
@@ -429,9 +432,9 @@ function checkEndTimeLot(string $time) {
 
     if ($endTimeTS > $lastDay) {
         return $timeEnd;
-    } else {
-        return $timeEnd = 'error';
-    }
+    } 
+
+    return $timeEnd = 'error';
 }
 
 /**
@@ -480,9 +483,8 @@ function endLot($timeEndLot) {
 
     if ($endTimeTS > $now) {
         return endSaleTimer($timeEnd);
-    } else {
-        return  'Торги окончены';
-    }         
+    } 
+    return  'Торги окончены';         
 }
 
 /**

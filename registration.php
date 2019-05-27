@@ -13,9 +13,19 @@ $content = include_template('reg.php', [
 	'category' => $category
 ]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$reginfo = $_POST;
+	if (isset($reginfo['email'])) {
+		$reginfo['email'] = htmlspecialchars($reginfo['email']);
+	}
+	if (isset($reginfo['name'])) {
+		$reginfo['name'] = htmlspecialchars($reginfo['name']);
+	}
+	if (isset($reginfo['message'])) {
+		$reginfo['message'] = htmlspecialchars($reginfo['message']);
+	}		
+	
 	$path = $_FILES['img']['tmp_name'];
 	$required_fields = ['email', 'password', 'name', 'message'];
 	$errors = [];
@@ -45,12 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		else {
 			move_uploaded_file($path, $img_path . $img_name);		
 		}
+	} else {
+		$img_url = '';
 	}
 
 	$userInfo = getInfoUserByEmail($link, $reginfo['email']);
 	$email_result = $userInfo['email'];
 
-	if($email_result){
+	if(isset($email_result)){
 		$errors['email'] = 'Данный email уже зарегистрирован';
 	}
 
@@ -75,9 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}	
 
 }
-
-$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Регистрация нового аккаунта', 'is_auth' => $is_auth, 'user_name' => $user_name, 'category' => $category]);
-
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Регистрация нового аккаунта', 'category' => $category]);
 print($layout_content);
-
 ?>

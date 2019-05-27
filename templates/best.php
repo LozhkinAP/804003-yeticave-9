@@ -8,6 +8,7 @@
     <section class="rates container">
       <h2>Мои ставки</h2>
       <table class="rates__list">
+      <?php if(isset($best)): ?>  
         <?php foreach ($best as $b): ?> 
             <tr class="rates__item">
               <td class="rates__info">
@@ -29,7 +30,7 @@
                 <?php echo TimeRate($b['dt']);?>
               </td>
             </tr>
-         
         <?php endforeach; ?>
+      <?php endif; ?>
       </table>
     </section>

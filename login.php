@@ -3,7 +3,7 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if(!$link) {
+if (!$link) {
 	connectDbError($link, 'Ошибка соединения с БД');
 }
 
@@ -13,9 +13,10 @@ $content = include_template('login.php', [
 	'category' => $category
 ]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$loginInfo = $_POST;
+	$loginInfo['email'] = htmlspecialchars($loginInfo['email']);
 	
 	$required_fields = ['email', 'password'];
 	$errors = [];
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$userInfo = getInfoUserByEmail($link, $loginInfo['email']);
 
-	if(!$userInfo) {
+	if (!$userInfo) {
 		$errors['email'] = 'Данный email не зарегистрирован';
 	} else {
 		$userName = $userInfo['name'];
@@ -59,7 +60,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Вход на сайт', 'category' => $category]);
-
 print($layout_content);
-
 ?>

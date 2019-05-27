@@ -3,12 +3,12 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if(!$link) {
-	ConnectDbError($link, 'Ошибка соединения с БД');
+if (!$link) {
+	connectDbError($link, 'Ошибка соединения с БД');
 }
 
 if (!isset($_GET['category'])) {
-	error404('Укажите категорию лотов');
+	error404($link, 'Укажите категорию лотов', 'Лоты по категории');
 }
 /* список категорий */
 $category = getAllCategory($link);
@@ -41,7 +41,7 @@ $content = include_template('alllots.php', [
 
 ]);
 
-$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Просмотр лота', 'category' => $category]);
+$layout_content = include_template('layout.php', ['content' => $content, 'title' => 'Лоты по категории', 'category' => $category]);
 
 print($layout_content);
 

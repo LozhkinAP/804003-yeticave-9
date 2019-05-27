@@ -4,11 +4,11 @@ require_once 'helpers.php';
 require_once 'functions.php';
 
 if(!$link) {
-	ConnectDbError($link, 'Ошибка соединения с БД');
+	connectDbError($link, 'Ошибка соединения с БД');
 }
 
 if (!isset($_GET['id'])) {
-	error404('Укажите ID лота');
+	error404($link, 'Укажите ID лота', 'Просмотр лота');
 }
 
 $category = getAllCategory($link);
@@ -16,16 +16,22 @@ $category = getAllCategory($link);
 /* Получаем лот по ID*/
 $contentLot = getLotById($link, $_GET['id']);
 
+if (!$contentLot) {
+	error404($link, 'Не найден лот по указанному ID', 'Просмотр лота');
+}
+
 /* Узнаем минимальную ставку по лоту с id = $_GET['id'] из таблицы rate, она является не ставкой, а начальной ценой*/
 $minRate = getMinRate($link, $_GET['id']);
 
 /* Делаем выборку по всем ставкам данного лота, за исключением начальной цены (в нашем случае rate с минимальной ценой).*/
 $rates = getRateById($link, $_GET['id'], $minRate['rate_price']);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$required_fields = ['cost'];
-	$errors = [];
-	
+$errors = [];
+$required_fields = ['cost'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	if (isset($_POST['cost'])) {
+		$_POST['cost'] = htmlspecialchars($_POST['cost']);
+	}
 	if (!(is_numeric($_POST['cost']) && $_POST['cost'] > 0)) {
 		$errors['cost'] = 'Введите целое положительное число';
 	} else if ($_POST['cost'] < ($contentLot['rate_price'] + $contentLot['step_rate'])) {
@@ -49,9 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}	
 }
 
-if (!$contentLot) {
-	error404('Не найден лот по указанному ID');
-}
+
 
 $content = include_template('lot_detail.php', ['contentLot' => $contentLot, 'category' => $category, 'errors' => $errors, 'rates' => $rates
 	]);
