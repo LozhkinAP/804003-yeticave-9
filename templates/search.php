@@ -18,14 +18,14 @@
   </section>
   <?php if($pages_count > 1): ?>
     <ul class="pagination-list">
-      <li class="pagination-item pagination-item-prev"><a href="search.php?search=<?php echo $search; ?>&find='Найти'&page=<?php if(($cur_page-1) > 0) {echo $cur_page-1;} else { echo 1; }?>">Назад</a></li>      
+      <li class="pagination-item pagination-item-prev"><a href="search.php?search=<?php echo esc($search); ?>&find='Найти'&page=<?php if(($cur_page-1) > 0) {echo $cur_page-1;} else { echo 1; }?>">Назад</a></li>      
           <?php print(include_template('pagination.php', [
             'pages' => $pages, 
             'pages_count' => $pages_count, 
             'cur_page' => $cur_page,
             'search' =>  $search
           ])); ?>
-      <li class="pagination-item pagination-item-next"><a href="search.php?search=<?php echo $search; ?>&find='Найти'&page=<?php if(($cur_page+1) > $pages_count) {echo $cur_page;} else { echo $cur_page+1; }?>">Вперед</a></li>
+      <li class="pagination-item pagination-item-next"><a href="search.php?search=<?php echo esc($search); ?>&find='Найти'&page=<?php if(($cur_page+1) > $pages_count) {echo $cur_page;} else { echo $cur_page+1; }?>">Вперед</a></li>
     </ul>
   <?php endif; ?>
 </div>

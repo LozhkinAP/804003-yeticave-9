@@ -3,17 +3,19 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if (!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+if(!$link) {
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
 if (!isset($_GET['category'])) {
 	error404($link, 'Укажите категорию лотов', 'Лоты по категории');
+} else {
+	$_GET['category'] = esc($_GET['category']);
 }
 /* список категорий */
-$category = getAllCategory($link);
+$category = get_all_category($link);
 /* категория по ID категории */
-$categoryById = getCategoryById($link, $_GET['category']);
+$categoryById = get_cat_by_id($link, $_GET['category']);
 
 $cur_page = $_GET['page'] ?? 1;
 $page_items = 3;
@@ -29,7 +31,7 @@ $offset = ($cur_page - 1) * $page_items;
 $pages = range(1, $pages_count);
 
 /* список лотов по по указанной категории*/
-$lots = getLotsByLimit($link, $_GET['category'], $page_items, $offset);
+$lots = get_lots_by_limit($link, $_GET['category'], $page_items, $offset);
 
 $content = include_template('alllots.php', [
 	'lots' => $lots, 

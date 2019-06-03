@@ -3,14 +3,13 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if (!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+if(!$link) {
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
-$category = getAllCategory($link);
-
+$category = get_all_category($link);
 /* Узнаем количество ставок по текущему $userID, исключая из этого списка начальные цены лотов (минимальные ставки в табл. rate, которые записываются в таблицу rate при добавлении нового лота)*/
-$best = getRateByUser($link, $_SESSION['userid']);
+$best = get_rate_by_user($link, esc($_SESSION['userid']));
 
 $content = include_template('best.php', ['category' => $category, 'best' => $best]);
 

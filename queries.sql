@@ -26,7 +26,16 @@ VALUES
 	'other'
 );
 
-/*Добавление пользователей*/
+
+/* ДЛЯ НАСТАВНИКА:
+	Для проверки задания после создания схемы БД выполняйте, пожалуйста, только SQL-запрос на добавление категорий (выше).
+	Лоты добавляйте через интерфейс проекта.
+	Пользователей создавайте через интерфейс проекта
+	Ставки по лотам делайте в карточке лота. 
+*/
+
+
+/*Добавление пользователей
 INSERT INTO user (dt_add, email, pass, name, avatar_path, contacts)
 VALUES 
 (
@@ -46,7 +55,7 @@ VALUES
 	'Spb'
 );
 
-/*Добавление лотов*/
+Добавление лотов
 INSERT INTO lot (dt_add, name, description, img_path, init_price, step_rate, category_id, end_lot_time, usercreate_id, uservictory_id)
 VALUES 
 (
@@ -122,7 +131,7 @@ VALUES
 	1
 );
 
-/*Добавление ставок*/
+Добавление ставок
 INSERT INTO rate (dt_rate, rate_price, user_id, lot_id)
 VALUES 
 (
@@ -197,7 +206,7 @@ VALUES
 	2, 
 	12
 );
-
+*/
 /*получить все категории*/
 SELECT name FROM categories;
 
