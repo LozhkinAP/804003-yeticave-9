@@ -4,10 +4,10 @@ require_once 'helpers.php';
 require_once 'functions.php';
 
 if(!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
-$category = getAllCategory($link);
+$category = get_all_category($link);
 
 $content = include_template('reg.php', [
 	'category' => $category
@@ -17,13 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$reginfo = $_POST;
 	if (isset($reginfo['email'])) {
-		$reginfo['email'] = htmlspecialchars($reginfo['email']);
+		$reginfo['email'] = esc($reginfo['email']);
 	}
 	if (isset($reginfo['name'])) {
-		$reginfo['name'] = htmlspecialchars($reginfo['name']);
+		$reginfo['name'] = esc($reginfo['name']);
 	}
 	if (isset($reginfo['message'])) {
-		$reginfo['message'] = htmlspecialchars($reginfo['message']);
+		$reginfo['message'] = esc($reginfo['message']);
 	}		
 	
 	$path = $_FILES['img']['tmp_name'];
@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$img_path = __DIR__ . '/avatar/';
 		$img_url = '/avatar/' . $img_name;
 		$file_type = mime_content_type($path);
-		if ($file_type !== 'image/jpeg' && $file_type !== 'image/png') {	
-			$errors['file'] = 'Загрузите картинку в PNG или JPEG';
+		if ($file_type !== 'image/jpeg') {	
+			$errors['file'] = 'Загрузите картинку в JPEG';
 		}
 		else {
 			move_uploaded_file($path, $img_path . $img_name);		
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$img_url = '';
 	}
 
-	$userInfo = getInfoUserByEmail($link, $reginfo['email']);
+	$userInfo = get_info_user_by_email($link, $reginfo['email']);
 	$email_result = $userInfo['email'];
 
 	if(isset($email_result)){

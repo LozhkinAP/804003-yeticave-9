@@ -6,8 +6,10 @@
             <!--заполните этот список из массива категорий-->
         <?php if (isset($category)): ?>
             <?php foreach ($category as $cat): ?>  
-                <li class="promo__item promo__item--<?php echo $cat['scode'];?>">
-                    <a class="promo__link" href="alllots.php?category=<?php echo $cat['id']; ?>"><?php echo $cat['name'];?></a>
+                <li class="promo__item promo__item--<?php echo esc($cat['scode']);?>">
+                    <a class="promo__link" href="alllots.php?category=<?php echo esc($cat['id']); ?>">
+                        <?php echo esc($cat['name']);?>
+                    </a>
                 </li>               
             <?php endforeach; ?>
         <?php endif; ?> 
