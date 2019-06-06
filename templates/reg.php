@@ -14,6 +14,7 @@
       <label for="email">E-mail <sup>*</sup></label>
       <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?php if(isset($reginfo['email'])) : echo esc($reginfo['email']); endif;?>">
       <span class="form__error"><?php if(isset($errors['email'])) : echo esc($errors['email']); endif; ?></span>
+
     </div>
 
     <div class="form__item <?php if(isset($errors['password'])) : echo 'form__item--invalid'; endif; ?>">
@@ -38,14 +39,11 @@
       </div>
       <span class="form__error"><?php if(isset($errors['file'])) : echo esc($errors['file']); endif; ?></span>
     </div>
-
-
     <div class="form__item <?php if(isset($errors['message'])) : echo 'form__item--invalid'; endif; ?>">
       <label for="message">Контактные данные <sup>*</sup></label>
       <textarea id="message" name="message" placeholder="Напишите как с вами связаться" ><?php if(isset($reginfo['message'])) : echo esc($reginfo['message']); endif;?></textarea>
       <span class="form__error"><?php if(isset($errors['message'])) : echo esc($errors['message']); endif; ?></span>
     </div>
-
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
     <button type="submit" class="button">Зарегистрироваться</button>
 

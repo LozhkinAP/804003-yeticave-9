@@ -6,6 +6,7 @@
  *
  * @return int $initPrice Отформатированная начальная цена
  */
+
 function initPrice(int $initPrice)
 {
     $initPrice = ceil($initPrice);
@@ -113,6 +114,7 @@ function add_class_container(string $pageUrl) {
     }
     return $main_class;
 }
+
 
 /**
  * Функция выполняет выборку из БД по указанному sql-запросу, возвращая массив с данными
@@ -282,6 +284,7 @@ function get_search(mysqli $connect, string $search, int $page_items, int $offse
     return db_fetch_data_array($connect, $sql, [$search]);
 }
 
+
 /**
  * Функция получает информацию о ставках, сделанных пользователем, за исключением начальной цены (минимальной ставки, которая записывается при добавлении лота). Используется для отображения информации на странице "Мои ставки"
  *
@@ -394,13 +397,20 @@ function get_all_category(mysqli $connect) {
  * @param int $categoryId ID категории
  * 
  * @return array 
- */
+ */ 
 function get_cat_by_id(mysqli $connect, int $categoryId) {
     $sql = "SELECT * FROM categories WHERE id = ?";
 
     return db_fetch_data_row($connect, $sql, [$categoryId]);
 }
 
+/**
+ * Функция возвращает cписок всех лотов
+ *
+ * @param mysqli $connect Ресурс соединения с БД
+ *
+ * @return array
+ */
 function get_all_lots(mysqli $connect) {
     $sql = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, c.name category, l.end_lot_time end_time FROM lot as l INNER JOIN categories as c ON l.category_id = c.id ORDER BY l.id DESC";
     $result = mysqli_query($connect, $sql);
@@ -455,6 +465,7 @@ function error404(mysqli $connect, string $txtError, string $title) {
     print($layout_content);
     exit;
 }
+
 
 /**
  * Функция проверяет корректно ли введено значение даты окончания торгов. Должно быть - текущий день + 24часа

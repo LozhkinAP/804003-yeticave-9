@@ -16,7 +16,6 @@
       <?php endif; ?> 
     </ul>
   </section>
-
   <?php if(isset($pages_count)): ?>
     <?php if($pages_count > 1): ?>
       <ul class="pagination-list">

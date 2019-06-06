@@ -1,4 +1,3 @@
-
 <?php if (isset($pages_count)) : ?>
 	<?php if ($pages_count > 1): ?>		
 		<?php foreach ($pages as $page): ?>
