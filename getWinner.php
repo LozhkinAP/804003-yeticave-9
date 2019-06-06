@@ -1,7 +1,7 @@
 <?php
 
 if(!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
 /*Получаем User ID победителей с привязкой к Лот ID */

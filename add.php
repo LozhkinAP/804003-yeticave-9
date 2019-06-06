@@ -92,6 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['file']  = 'Вы не загрузили файл';
 	}
 
+	if ($newLot['category'] === 'Выберите категорию') {
+		$errors['category'] = 'Вы не выбрали категорию';
+	}
+
 	if(count($errors)) {
 		$content = include_template('lot_add.php', ['category' => $category, 'newLot'=> $newLot, 'errors' => $errors]);
 	}

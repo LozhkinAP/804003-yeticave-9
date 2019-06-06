@@ -7,9 +7,13 @@ if(!$link) {
 	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
+if (isset($_SESSION['userid'])) {
+	$userid = esc($_SESSION['userid']);
+}
+
 $category = get_all_category($link);
 /* Узнаем количество ставок по текущему $userID, исключая из этого списка начальные цены лотов (минимальные ставки в табл. rate, которые записываются в таблицу rate при добавлении нового лота)*/
-$best = get_rate_by_user($link, esc($_SESSION['userid']));
+$best = get_rate_by_user($link, esc($userid));
 
 $content = include_template('best.php', ['category' => $category, 'best' => $best]);
 

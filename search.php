@@ -23,7 +23,7 @@ $pages = range(1, $pages_count);
 if ($search) {
 	$lots = get_search($link, $search, $page_items, $offset);
 	if (empty($lots)) {
-		error404($link, 'Не найден лот по вашему запросу', 'Результаты поиска');
+		error404($link, 'Не найдено ничего', 'Результаты поиска');
 	}
 } 
 $content = include_template('search.php',  [

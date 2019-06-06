@@ -17,9 +17,9 @@
             <option>Выберите категорию</option>
             <?php if(isset($category)): ?> 
               <?php foreach ($category as $cat): ?> 
-                <option value="<?php echo $cat['name']; ?>"
-                  <?php if (isset($_POST['category']) && ($cat['name'] === $_POST['category'])): ?>selected="selected"<?php endif; ?>>                 
-                    <?php echo esc($cat['name']);?>
+                <option value="<?php if (isset($cat['name'])) : echo esc($cat['name']); endif; ?>"
+                  <?php if (isset($_POST['category']) && isset($cat['name']) && ($cat['name'] === $_POST['category'])): ?>selected="selected"<?php endif; ?>>                 
+                    <?php if (isset($cat['name'])) : echo esc($cat['name']); endif; ?>
                 </option>
               <?php endforeach; ?>
             <?php endif; ?>

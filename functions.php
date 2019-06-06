@@ -5,7 +5,8 @@
  * @param int $initPrice Начальная цена
  *
  * @return int $initPrice Отформатированная начальная цена
-*/
+ */
+
 function initPrice(int $initPrice)
 {
     $initPrice = ceil($initPrice);
@@ -18,20 +19,20 @@ function initPrice(int $initPrice)
     return $initPrice;
 }
 
-
 /**
  * Функция возвращает время до окончания торгов по лоту в удобночитаемом формате
  *
  * @param string $data Время завершения торгов по лоту
  *
  * @return string $Time Время 
-*/
+ */
 function time_rate(string $data) {
     $timeStRate = $data;
     $RateDate = strtotime($timeStRate);
     $InitDay = strtotime('now 00:00:00');
     $CurrentData = strtotime('now');
     $Delta = $CurrentData - $RateDate;
+    $Time = '';
 
     if (($CurrentData - $InitDay + 24*3600) < $Delta) {
         $Time = strstr($timeStRate, ' ', true).' в '.strstr($timeStRate, ' ', false);
@@ -54,7 +55,7 @@ function time_rate(string $data) {
  * @param string $TimeEndOfLot Время завершения торгов по лоту
  * 
  * @return string $timer Время 
-*/
+ */
 function end_sale_timer(string $TimeEndOfLot) {
 
     $CurrentData = strtotime('now');
@@ -75,6 +76,7 @@ function end_sale_timer(string $TimeEndOfLot) {
         $Minutes = '0'.$Minutes;
     }
     $timer = $Hours.':'.$Minutes.':'.$Seconds;
+
     return $timer;
 }
 
@@ -84,7 +86,7 @@ function end_sale_timer(string $TimeEndOfLot) {
  * @param string $TimeEndOfLot Время завершения торгов по лоту
  *
  * @return string $Class Имя класса 
-*/
+ */
 function end_sale_timer_hour(string $TimeEndOfLot) {
     $CurrentData = strtotime('now');
     $EndOfLot = strtotime($TimeEndOfLot);
@@ -104,7 +106,7 @@ function end_sale_timer_hour(string $TimeEndOfLot) {
  * @param string $pageUrl Время завершения торгов по лоту
  *
  * @return string $main_class Имя класса
-*/
+ */
 function add_class_container(string $pageUrl) {
     $main_class = '';
     if ($pageUrl === "/" || $pageUrl === "/index.php") {
@@ -122,7 +124,7 @@ function add_class_container(string $pageUrl) {
  * @param array $data = [] - данные для запроса SQL
  * 
  * @return array Массив с данными
-*/
+ */
 function db_fetch_data_array(mysqli $link, string $sql, array $data = []) {
    $result = [];
    $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -142,7 +144,7 @@ function db_fetch_data_array(mysqli $link, string $sql, array $data = []) {
  * @param array $data = [] - данные для запроса SQL
  *
  * @return array Массив с одним элементом
-*/
+ */
 function db_fetch_data_row(mysqli $link, string $sql, array $data = []) {
    $result = [];
    $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -162,7 +164,7 @@ function db_fetch_data_row(mysqli $link, string $sql, array $data = []) {
  * @param array $data = [] - данные для запроса SQL
  *
  * @return boolean
-*/
+ */
 function db_insert_data(mysqli $link, string $sql, array $data = []) {
    $stmt = db_get_prepare_stmt($link, $sql, $data);
    $result = mysqli_stmt_execute($stmt);
@@ -180,7 +182,7 @@ function db_insert_data(mysqli $link, string $sql, array $data = []) {
  * @param array $data = [] - Данные для запроса SQL
  *
  * @return boolean
-*/
+ */
 function db_update_data(mysqli $link, string $sql, array $data = []) {
    $stmt = db_get_prepare_stmt($link, $sql, $data);
    $result = mysqli_stmt_execute($stmt);
@@ -194,7 +196,7 @@ function db_update_data(mysqli $link, string $sql, array $data = []) {
  * @param int $id ID Лота
  *
  * @return array 
-*/
+ */
 function get_lot_by_id(mysqli $connect, int $id) {
     $sql = "SELECT l.id id, l.name name, l.dt_add dt, l.init_price price, l.img_path url, l.description description, l.step_rate step_rate, l.usercreate_id usercreate_id, l.end_lot_time end_time, c.name category, MAX(r.rate_price) rate_price
             FROM lot AS l 
@@ -215,7 +217,7 @@ function get_lot_by_id(mysqli $connect, int $id) {
  * @param int $lotId ID лота
  *
  * @return boolean
-*/
+ */
 function add_rate_by_lot(mysqli $connect, int $cost, int $userId, int $lotId) {
     $sql = "INSERT INTO rate (dt_rate, rate_price, user_id, lot_id)
             VALUES (NOW(), ?, ?, ?)";
@@ -230,7 +232,7 @@ function add_rate_by_lot(mysqli $connect, int $cost, int $userId, int $lotId) {
  * @param int $id ID лота
  *
  * @return array 
-*/
+ */
 function get_rate_by_lot_id(mysqli $connect, int $id) {
     $sql = "SELECT r.dt_rate, r.user_id, r.rate_price, r.lot_id, u.name
             FROM rate AS r
@@ -250,7 +252,7 @@ function get_rate_by_lot_id(mysqli $connect, int $id) {
  * @param int $id ID лота
  *
  * @return array
-*/
+ */
 function last_rate_user(mysqli $connect, int $id) {
     $sql = "SELECT user_id 
             FROM rate
@@ -270,7 +272,7 @@ function last_rate_user(mysqli $connect, int $id) {
  * @param int $offset Оффсет для пагинации
  *
  * @return array 
-*/
+ */
 function get_search(mysqli $connect, string $search, int $page_items, int $offset){
     $sql = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, l.description description, c.name category, l.end_lot_time end_time
             FROM lot as l 
@@ -290,7 +292,7 @@ function get_search(mysqli $connect, string $search, int $page_items, int $offse
  * @param int $userId ID пользователя
  *
  * @return array
-*/
+ */
 function get_rate_by_user(mysqli $connect, int $userId) {
     $sql = 
     "SELECT A.NAME, A.rate_price, A.id, A.url, A.category, A.dt, A.rate_price, A.end_time  FROM(
@@ -319,7 +321,7 @@ function get_rate_by_user(mysqli $connect, int $userId) {
  * @param int $offset для пагинации
  *
  * @return array 
-*/
+ */
 function get_lots_by_limit(mysqli $connect, int $idCategory, int $page_items, int $offset) {
     $sql = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, l.category_id, c.name category, l.end_lot_time end_time 
                 FROM lot as l 
@@ -337,7 +339,7 @@ function get_lots_by_limit(mysqli $connect, int $idCategory, int $page_items, in
  * @param $loginInfoEmail string 
  *
  * @return array 
-*/
+ */
 function get_info_user_by_email(mysqli $connect, string $loginInfoEmail) {
     $sql = "SELECT * FROM user WHERE email = ?";
 
@@ -351,7 +353,7 @@ function get_info_user_by_email(mysqli $connect, string $loginInfoEmail) {
  * @param int $Id ID пользователя
  *
  * @return array
-*/
+ */
 function get_info_user_by_id(mysqli $connect, int $idUser) {
     $sql = "SELECT * FROM user WHERE id = ?";
 
@@ -365,7 +367,7 @@ function get_info_user_by_id(mysqli $connect, int $idUser) {
  * @param string $name Имя категории
  *
  * @return array 
-*/
+ */
 function get_category_by_name(mysqli $connect, string $name) {
     $sql = "SELECT * FROM categories WHERE name = ?";
     return db_fetch_data_row($connect, $sql, [$name]);
@@ -377,7 +379,7 @@ function get_category_by_name(mysqli $connect, string $name) {
  * @param mysqli $connect Ресурс соединения с БД
  *
  * @return array 
-*/
+ */
 function get_all_category(mysqli $connect) {
     $sql = "SELECT * FROM categories";
     $res = mysqli_query($connect, $sql);
@@ -395,14 +397,20 @@ function get_all_category(mysqli $connect) {
  * @param int $categoryId ID категории
  * 
  * @return array 
-*/
+ */ 
 function get_cat_by_id(mysqli $connect, int $categoryId) {
     $sql = "SELECT * FROM categories WHERE id = ?";
 
     return db_fetch_data_row($connect, $sql, [$categoryId]);
 }
 
-
+/**
+ * Функция возвращает cписок всех лотов
+ *
+ * @param mysqli $connect Ресурс соединения с БД
+ *
+ * @return array
+ */
 function get_all_lots(mysqli $connect) {
     $sql = "SELECT l.id id, l.name name, l.init_price price, l.img_path url, c.name category, l.end_lot_time end_time FROM lot as l INNER JOIN categories as c ON l.category_id = c.id ORDER BY l.id DESC";
     $result = mysqli_query($connect, $sql);
@@ -419,7 +427,7 @@ function get_all_lots(mysqli $connect) {
  * @param string $txtError Текст ошибки
  *
  * @return string 
-*/
+ */
 function select_db_error(string $txtError) {
     $txt = $txtError;
     $content = include_template('error.php',['text'  => $txt]);
@@ -431,7 +439,7 @@ function select_db_error(string $txtError) {
  *
  * @param mysqli $connect Ресурс соединения с БД
  * @param string $txtError, текст, дополнительный к тексту, полученому от mysqli_connect_error()
-*/
+ */
 function connect_db_error(mysqli $connect, string $txtError) {
     $txt = $txtError;
     $error = mysqli_connect_error($connect);
@@ -447,13 +455,13 @@ function connect_db_error(mysqli $connect, string $txtError) {
  * @param string $txtError Текст ошибки + к коду 404
  * @param string $title - заголовок страницы
  * @param mysqli $connect Ресурс соединения с БД
-*/
+ */
 function error404(mysqli $connect, string $txtError, string $title) {
     http_response_code(404);
     $error = http_response_code();
     $txt = $txtError;
     $content = include_template('error.php',['text'  => $txt, 'error' => $error]);
-    $layout_content = include_template('layout.php', ['content' => $content, 'title' => $title, 'category' => $category = getAllCategory($connect)]);
+    $layout_content = include_template('layout.php', ['content' => $content, 'title' => $title, 'category' => $category = get_all_category($connect)]);
     print($layout_content);
     exit;
 }
@@ -465,7 +473,7 @@ function error404(mysqli $connect, string $txtError, string $title) {
  * @param string $time 
  *
  * @return string 
-*/
+ */
 function check_end_time_lot(string $time) {
     $endTimeTS = strtotime($time);
     $initDay = strtotime('now');
@@ -484,7 +492,7 @@ function check_end_time_lot(string $time) {
  * @param mysqli $connect Ресурс соединения с БД
  *
  * @return array Массив с победителями
-*/
+ */
 function get_win_array(mysqli $connect) {
     /*Нижняя часть запроса - исключаем лоты, по которым не было сделано ставок. т.е у них только начальная цена.*/
     $sql = "
@@ -519,7 +527,7 @@ function get_win_array(mysqli $connect) {
  * @param string $timeEndLot Дата завершения торгов
  *
  * @return string $timeEnd. 
-*/
+ */
 function end_lot($timeEndLot) {
     $endTimeTS = strtotime($timeEndLot);
     $now = strtotime('now');
@@ -536,7 +544,7 @@ function end_lot($timeEndLot) {
  * @param string $str Строка
  *
  * @return $data 
-*/
+ */
 function esc($str){
     $data = htmlspecialchars($str);
     return $data;

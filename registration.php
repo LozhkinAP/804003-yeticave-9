@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	foreach ($reginfo as $key => $value) {
-		if ($key == "email") {
+		if ($key === "email") {
 			if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
 				$errors[$key] = 'Email должен быть корректным';
 			}
