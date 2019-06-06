@@ -1,12 +1,12 @@
 <?php
 
 if(!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
 /*Получаем User ID победителей с привязкой к Лот ID */
-$winnersArray = getWinnersArray($link);
-/* добавляем инф. о победителях в lot, если победители существуют и отправляем инф-ю на email */
+$winnersArray = get_win_array($link);
+
 if(!empty($winnersArray)) {
     foreach ($winnersArray as $winner) {
 
@@ -14,13 +14,13 @@ if(!empty($winnersArray)) {
         $result = db_update_data($link, $updateLotWin, [$winner['user_id'], $winner['lot_id']]);
 
         if (!$result) {
-        	$layout_content = selectDbError('Проблема при добавления победителя в БД');
+        	$layout_content = select_db_error('Проблема при добавления победителя в БД');
         	print($layout_content);
         	exit;
         }
 
-		$userWin = getInfoUserById($link, $winner['user_id']);
-		$lotName =getLotById($link, $winner['lot_id']);
+		$userWin = get_info_user_by_id($link, $winner['user_id']);
+		$lotName =get_lot_by_id($link, $winner['lot_id']);
 		
 		$msg = include_template('email.php', [
 			'userWin' => $userWin, 

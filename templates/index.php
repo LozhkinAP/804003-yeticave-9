@@ -4,13 +4,15 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-        <?php if (isset($category)): ?>
-            <?php foreach ($category as $cat): ?>  
-                <li class="promo__item promo__item--<?php echo $cat['scode'];?>">
-                    <a class="promo__link" href="alllots.php?category=<?php echo $cat['id']; ?>"><?php echo $cat['name'];?></a>
-                </li>               
-            <?php endforeach; ?>
-        <?php endif; ?> 
+            <?php if (isset($category)): ?>
+                <?php foreach ($category as $cat): ?>  
+                    <li class="promo__item promo__item--<?php if (isset($cat['scode'])) : echo esc($cat['scode']); endif; ?>">
+                        <a class="promo__link" href="alllots.php?category=<?php if (isset($cat['id'])) : echo esc($cat['id']); endif; ?>">
+                            <?php if (isset($cat['name'])) : echo esc($cat['name']); endif; ?>
+                        </a>
+                    </li>               
+                <?php endforeach; ?>
+            <?php endif; ?> 
         </ul>
     </section>
     <section class="lots">

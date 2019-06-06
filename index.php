@@ -5,8 +5,8 @@ require_once 'functions.php';
 require_once 'helpers.php';
 require_once 'getWinner.php';
 
-$category = getAllCategory($link);
-$lots = getAllLots($link);
+$category = get_all_category($link);
+$lots = get_all_lots($link);
 
 if (!empty($lots)) {
 	$content = include_template('index.php', ['lots' => $lots, 'category' => $category]);	

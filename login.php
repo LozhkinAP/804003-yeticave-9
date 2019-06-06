@@ -3,11 +3,11 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if (!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+if(!$link) {
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
 
-$category = getAllCategory($link);
+$category = get_all_category($link);
 
 $content = include_template('login.php', [
 	'category' => $category
@@ -16,7 +16,7 @@ $content = include_template('login.php', [
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$loginInfo = $_POST;
-	$loginInfo['email'] = htmlspecialchars($loginInfo['email']);
+	$loginInfo['email'] = esc($loginInfo['email']);
 	
 	$required_fields = ['email', 'password'];
 	$errors = [];
@@ -28,14 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	foreach ($loginInfo as $key => $value) {
-		if ($key == "email") {
+		if ($key === "email") {
 			if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
 				$errors[$key] = 'Email должен быть корректным';
 			}
 		}
 	} 
 
-	$userInfo = getInfoUserByEmail($link, $loginInfo['email']);
+	$userInfo = get_info_user_by_email($link, $loginInfo['email']);
 
 	if (!$userInfo) {
 		$errors['email'] = 'Данный email не зарегистрирован';

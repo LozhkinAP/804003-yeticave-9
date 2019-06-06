@@ -9,7 +9,7 @@ require_once 'init.php';
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title?></title>
+    <title><?php if (isset($title)) : echo esc($title); endif;?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/flatpickr.min.css" rel="stylesheet">
@@ -24,14 +24,14 @@ require_once 'init.php';
                     <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
                 </a>
                 <form class="main-header__search" method="get" action="search.php" autocomplete="off">
-                    <input type="search" name="search" placeholder="Поиск лота" value="<?php if(isset($_GET['search'])) : echo $_GET['search']; endif;?>">
+                    <input type="search" name="search" placeholder="Поиск лота" value="<?php if (isset($_GET['search'])) : echo esc($_GET['search']); endif;?>">
                     <input class="main-header__search-btn" type="submit" name="find" value="Найти">
                 </form>
                 <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
 
                 <nav class="user-menu">
 
-                    <?php if(!isset($_SESSION['username'])) :?>
+                    <?php if (!isset($_SESSION['username'])) :?>
                         <ul class="user-menu__list">
                             <li class="user-menu__item">
                               <a href="registration.php">Регистрация</a>
@@ -42,7 +42,7 @@ require_once 'init.php';
                       </ul>
                       <?php else: ?>
                         <div class="user-menu__logged">
-                            <p><?php echo $_SESSION['username'];?></p>
+                            <p><?php echo esc($_SESSION['username']);?></p>
                             <a class="user-menu__bets" href="best.php">Мои ставки</a>
                             <a class="user-menu__logout" href="logout.php">Выход</a>
                         </div>
@@ -52,21 +52,23 @@ require_once 'init.php';
             </div>
         </header>
 
-        <main class="<?php CheckUrl();?>">
-            <?php if(isset($content)): echo $content; endif; ?>
+        <main class="<?php $pageUrl = $_SERVER['REQUEST_URI']; echo add_class_container($pageUrl);?>">
+            <?php if (isset($content)): echo $content; endif; ?>
         </main>
     </div>
 
     <footer class="main-footer">
         <nav class="nav">
             <ul class="nav__list container">
-
-        <?php foreach ($category as $cat): ?> 
-          <li class="nav__item">
-            <a href="alllots.php?category=<?php echo $cat['id']; ?>"><?php echo $cat['name'];?></a>
-          </li>
-        <?php endforeach; ?>
-
+            <?php if (isset($category)): ?> 
+                <?php foreach ($category as $cat): ?> 
+                <li class="nav__item">
+                    <a href="alllots.php?category=<?php if (isset($cat['id'])) : echo esc($cat['id']); endif; ?>">
+                        <?php if (isset($cat['name'])) : echo esc($cat['name']); endif; ?>        
+                    </a>
+                </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
