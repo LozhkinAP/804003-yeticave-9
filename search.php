@@ -3,10 +3,11 @@ require_once 'init.php';
 require_once 'helpers.php';
 require_once 'functions.php';
 
-if (!$link) {
-	connectDbError($link, 'Ошибка соединения с БД');
+if(!$link) {
+	connect_db_error($link, 'Ошибка соединения с БД');
 }
-$category = getAllCategory($link);
+
+$category = get_all_category($link);
 $search = trim($_GET['search']) ?? '';
 $cur_page = $_GET['page'] ?? 1;
 $page_items = 3;
@@ -20,9 +21,9 @@ $pages_count = ceil($items_count / $page_items);
 $offset = ($cur_page - 1) * $page_items;
 $pages = range(1, $pages_count);
 if ($search) {
-	$lots = getSearch($link, $search, $page_items, $offset);
+	$lots = get_search($link, $search, $page_items, $offset);
 	if (empty($lots)) {
-		error404($link, 'Не найден лот по вашему запросу', 'Результаты поиска');
+		error404($link, 'Не найдено ничего', 'Результаты поиска');
 	}
 } 
 $content = include_template('search.php',  [

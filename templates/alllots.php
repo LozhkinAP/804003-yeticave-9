@@ -5,7 +5,11 @@
     </nav>
     <div class="container">
       <section class="lots">
-        <h2>Все лоты в категории <span>«<?php echo $categoryById['name']?>»</span></h2>
+        <h2>Все лоты в категории 
+          <span>
+            «<?php if (isset($categoryById['name'])) : echo esc($categoryById['name']); endif;?>»
+          </span>
+        </h2>
         <ul class="lots__list">
           <?php if(isset($lots)): ?>   
             <?php 
@@ -16,16 +20,21 @@
           <?php endif; ?> 
         </ul>
       </section>
-      <?php if($pages_count > 1): ?>
-        <ul class="pagination-list">
-          <li class="pagination-item pagination-item-prev"><a href="alllots.php?category=<?php echo $categoryById['id']?>&page=<?php if(($cur_page-1) > 0) {echo $cur_page-1;} else { echo 1; }?>">Назад</a></li>      
-            <?php print(include_template('pagination.php', [
-              'pages' => $pages, 
-              'pages_count' => $pages_count, 
-              'cur_page' => $cur_page, 
-              'categoryById' => $categoryById
-            ])); ?>
-          <li class="pagination-item pagination-item-next"><a href="alllots.php?category=<?php echo $categoryById['id']?>&page=<?php if(($cur_page+1) > $pages_count) {echo $cur_page;} else { echo $cur_page+1; }?>">Вперед</a></li>
-        </ul>
+      <?php if(isset($pages_count)): ?>
+        <?php if($pages_count > 1): ?>
+          <ul class="pagination-list">
+            <li class="pagination-item pagination-item-prev">
+              <a href="alllots.php?category=<?php if (isset($categoryById['id'])) : echo esc($categoryById['id']); endif;?>&page=<?php if (isset($cur_page)): ?><?php if(($cur_page-1) > 0) {echo $cur_page-1;} else { echo 1; }?><?php endif; ?>">Назад
+              </a>
+            </li>      
+              <?php print(include_template('pagination.php', [
+                'pages' => $pages, 
+                'pages_count' => $pages_count, 
+                'cur_page' => $cur_page, 
+                'categoryById' => $categoryById
+              ]));?>
+            <li class="pagination-item pagination-item-next"><a href="alllots.php?category=<?php if (isset($categoryById['id'])) : echo esc($categoryById['id']); endif;?>&page=<?php if (isset($cur_page)): ?><?php if(($cur_page+1) > $pages_count) {echo $cur_page;} else { echo $cur_page+1; }?><?php endif; ?>">Вперед</a></li>
+          </ul>
+        <?php endif;?>
       <?php endif;?>
     </div>
